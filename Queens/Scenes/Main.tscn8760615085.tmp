@@ -1,6 +1,26 @@
 [gd_scene load_steps=2 format=3 uid="uid://d2orq86btic6v"]
 
-[ext_resource type="Script" uid="uid://mjxnmnf1iafs" path="res://Scripts/Main.gd" id="1_m8x5s"]
+[sub_resource type="GDScript" id="GDScript_c1w88"]
+script/source = "extends Control
+
+#Vectores de Hilos
+var row_threads = []
+var col_threads = []
+var color_threads = []
+
+#Mutex de Hilos
+var row_mtx
+var col_mtx
+var color_mtx
+
+func _ready():
+	
+	#Se crean los hilos
+	#create_threads()
+
+	#Se crean los semáforos
+	#create_semaphores()
+"
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -11,7 +31,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_m8x5s")
+script = SubResource("GDScript_c1w88")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1

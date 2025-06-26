@@ -1,9 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cfqdj3sbor4v4"]
 
 [ext_resource type="Script" uid="uid://dg6tgv17m2aa4" path="res://Scripts/Cell_Controller.gd" id="1_rdgq0"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_rdgq0"]
-load_path = "res://.godot/imported/Crown.png-859535b54bb42d1f8eec47b10d88cb06.ctex"
+[ext_resource type="Texture2D" uid="uid://fr21n0a5huir" path="res://Sprites/Crown.webp" id="2_jgku0"]
 
 [node name="Button" type="Button"]
 custom_minimum_size = Vector2(64, 64)
@@ -16,6 +14,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+flat = true
 script = ExtResource("1_rdgq0")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -35,5 +34,5 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("CompressedTexture2D_rdgq0")
-stretch_mode = 5
+texture = ExtResource("2_jgku0")
+expand_mode = 3

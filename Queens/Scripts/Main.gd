@@ -1,5 +1,8 @@
 extends Control
 
+#Referencias a Archivos
+var colors_file = "res://Settings/Colors.csv"
+
 #Referencias a Nodos
 @onready var grid = $CenterContainer/GridContainer
 
@@ -14,19 +17,41 @@ var col_mtx
 var color_mtx
 
 #Generales
-const BOARD_SIZE = 9
+const BOARD_SIZE = 8
 var board = []
+var colors = []
 
 func _ready():
+
+	#Se obtienen los colores del tablero
+	get_board_colors()
 
 	#Se crea el tablero
 	create_board()
 
 	#Se crean los hilos
-	create_threads()
+	#create_threads()
 
 	#Se crean los semáforos
-	create_semaphores()
+	#create_semaphores()
+
+func get_board_colors():
+
+	var file = FileAccess.open(colors_file, FileAccess.READ)
+
+	if file == null:
+		print("Error al abrir el archivo.")
+
+	while not file.eof_reached():
+		var line = file.get_line()
+		var values = line.strip_edges().split(",", false)
+
+		for i in range(values.size()):
+			values[i] = values[i].strip_edges()
+
+		colors.append(values)
+
+	file.close()
 
 func create_board():
 
@@ -38,10 +63,10 @@ func create_board():
 		board[i] = []
 
 		for j in range(BOARD_SIZE):
-			var cell = create_cell(i, j, 1) #TODO: Falta setear el color
+			var cell = create_cell(i, j, colors[i][j])
 			board[i].append(cell)
 
-func create_cell(row: int, col: int, color: int):
+func create_cell(row: int, col: int, color: String):
 
 	var cell_scene = preload("res://Scenes/Cell.tscn")
 	var cell = cell_scene.instantiate()
@@ -49,7 +74,7 @@ func create_cell(row: int, col: int, color: int):
 	grid.add_child(cell)
 	cell.row = row
 	cell.col = col
-	cell.color = color
+	cell.set_color(color)
 
 	return cell
 

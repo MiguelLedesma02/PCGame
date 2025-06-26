@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1i06eeadxet6"
-valid=false
+uid="uid://fr21n0a5huir"
+path="res://.godot/imported/Crown.webp-d07b5ff2b8b27536f93763b27d7c9b07.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
-source_file="res://Sprites/Crown.png"
+source_file="res://Sprites/Crown.webp"
+dest_files=["res://.godot/imported/Crown.webp-d07b5ff2b8b27536f93763b27d7c9b07.ctex"]
 
 [params]
 
