@@ -29,11 +29,10 @@ func _ready():
 	#Se crea el tablero
 	create_board()
 
-	#Se crean los hilos
-	#create_threads()
-
 	#Se crean los semáforos
-	#create_semaphores()
+	create_mutex()
+
+	return
 
 func get_board_colors():
 
@@ -44,6 +43,7 @@ func get_board_colors():
 
 	while not file.eof_reached():
 		var line = file.get_line()
+		line = line.replace('"', '')
 		var values = line.strip_edges().split(",", false)
 
 		for i in range(values.size()):
@@ -52,6 +52,8 @@ func get_board_colors():
 		colors.append(values)
 
 	file.close()
+
+	return
 
 func create_board():
 
@@ -65,6 +67,8 @@ func create_board():
 		for j in range(BOARD_SIZE):
 			var cell = create_cell(i, j, colors[i][j])
 			board[i].append(cell)
+
+	return
 
 func create_cell(row: int, col: int, color: String):
 
@@ -87,45 +91,75 @@ func create_threads():
 
 	return
 
-func create_semaphores():
-	
-	var semaphore_scene = preload("res://Scenes/Semaphore.tscn")
+func destroy_threads():
 
-	row_mtx = semaphore_scene.instantiate()
-	col_mtx = semaphore_scene.instantiate()
-	color_mtx = semaphore_scene.instantiate()
+	row_threads = []
+	col_threads = []
+	color_threads = []
+	
+	return
+
+func create_mutex():
+
+	row_mtx = Mutex.new()
+	col_mtx = Mutex.new()
+	color_mtx = Mutex.new()
 
 	return
 
-func cell_updated(row: int, col: int, color: int):
+func cell_updated():
 	
-	var crowns_row = 0
-	var crowns_col = 0
-	var crowns_color = 0
-	
+	var only_one_crown_row = false
+	var only_one_crown_col = false
+	var only_one_crown_color = false
+
+	var rows_ok = 0
+	var columns_ok = 0
+	var colors_ok = 8 #TODO: Este dato es para debug. Modificar
+
+	#Se crean los hilos
+	create_threads()
+
+	#Se crea un hilo para cada fila, columna y color
 	for i in range(BOARD_SIZE):
-		row_threads[row].start(self, "count_crowns_in_row", [row])
-		col_threads[col].start(self, "count_crowns_in_column", [col])
-		color_threads[color].start(self, "count_crowns_in_color", [color])
-		
-		if row_threads[row].is_alive():
-			row_mtx.adquire()
-			crowns_row = row_threads[row].wait_to_finish()
-			row_mtx.release()
-		if col_threads[col].is_alive():
-			col_mtx.adquire()
-			crowns_col = col_threads[col].wait_to_finish()
-			col_mtx.release()
-		if color_threads[color].is_alive():
-			color_mtx.adquire()
-			crowns_color = color_threads[color].wait_to_finish()
-			color_mtx.release()
-	
-	if crowns_row == BOARD_SIZE && crowns_col == BOARD_SIZE && crowns_color == BOARD_SIZE:
+		row_threads[i].start(count_crowns_in_row.bind(i))
+		col_threads[i].start(count_crowns_in_column.bind(i))
+		#TODO: Falta las regiones de color
+
+	for i in range(BOARD_SIZE):
+
+		if row_threads[i].is_started():
+			row_mtx.lock()
+			only_one_crown_row = row_threads[i].wait_to_finish()
+			if only_one_crown_row:
+				rows_ok += 1
+			row_mtx.unlock()
+
+		if col_threads[i].is_started():
+			col_mtx.lock()
+			only_one_crown_col = col_threads[i].wait_to_finish()
+			if only_one_crown_col:
+				columns_ok += 1
+			col_mtx.unlock()
+
+		if color_threads[i].is_started():
+			color_mtx.lock()
+			only_one_crown_color = color_threads[i].wait_to_finish()
+			if only_one_crown_color:
+				colors_ok += 1
+			color_mtx.unlock()
+
+	if rows_ok == BOARD_SIZE && columns_ok == BOARD_SIZE && colors_ok == BOARD_SIZE:
 			print("Has ganado!")
-	
+
+	#Se destruyen los hilos
+	destroy_threads()
+
+	return
+
 func count_crowns_in_row(row: int):
 
+	var one_crown = false
 	var crowns = 0
 
 	for i in range(BOARD_SIZE):
@@ -133,10 +167,14 @@ func count_crowns_in_row(row: int):
 		if board[row][i].getHasCrown():
 			crowns = crowns + 1
 
-	return crowns
+	if crowns == 1:
+		one_crown = true
+
+	return one_crown
 
 func count_crowns_in_column(col: int):
 
+	var one_crown = false
 	var crowns = 0
 
 	for i in range(BOARD_SIZE):
@@ -144,10 +182,14 @@ func count_crowns_in_column(col: int):
 		if board[i][col].getHasCrown():
 			crowns = crowns + 1
 
-	return crowns
+	if crowns == 1:
+		one_crown = true
 
-func count_crowns_in_color(color: int):
+	return one_crown
 
+func count_crowns_in_color(color: String):
+
+	var one_crown = false
 	var crowns = 0
 
 	for i in range(BOARD_SIZE):
@@ -156,4 +198,7 @@ func count_crowns_in_color(color: int):
 			if board[i][j].getColor() == color && board[i][j].getHasCrown():
 				crowns = crowns + 1
 
-	return crowns
+	if crowns == 1:
+		one_crown = true
+
+	return one_crown

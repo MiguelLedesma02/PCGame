@@ -18,10 +18,10 @@ func _ready():
 
 func _on_pressed():
 
-	print("Se colocó una corona sobre la celda: (", row, ",", col, ")")
 	has_crown = !has_crown
 	crown.visible = has_crown
-	#main.cell_updated(row, col, color)
+
+	main.cell_updated()
 
 func set_color(c: String):
 
@@ -45,7 +45,7 @@ func set_color(c: String):
 		color_rect.color = Color8(255, 123, 96)
 
 func getColor():
-	return color_rect.color
+	return color
 
 func getHasCrown():
 	return has_crown
