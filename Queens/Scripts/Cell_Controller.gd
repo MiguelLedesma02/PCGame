@@ -4,24 +4,51 @@ extends Button
 @onready var main = get_tree().get_root().get_node("Main")
 @onready var color_rect = $ColorRect
 @onready var crown = $Crown
+@onready var cross = $Cross
 
 #Generales
 var row: int
 var col: int
 var color: String
 var has_crown := false
+var has_cross := false
 
 func _ready():
 
-	pressed.connect(_on_pressed)
 	crown.visible = has_crown
+	cross.visible = has_cross
 
-func _on_pressed():
+func _gui_input(event):
 
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			_on_left_pressed()
+
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			_on_right_pressed()
+
+func _on_left_pressed():
+
+	var board = main.get_node("Board")
+
+	#Se coloca la corona y se quita la cruz
 	has_crown = !has_crown
 	crown.visible = has_crown
+	if has_cross:
+		has_cross = false
+		cross.visible = has_cross
 
-	main.cell_updated()
+	board.cell_updated()
+
+func _on_right_pressed():
+
+	#Se coloca la cruz y se quita la corona
+	has_cross = !has_cross
+	cross.visible = has_cross
+	if has_crown:
+		has_crown = false
+		crown.visible = has_crown
 
 func set_color(c: String):
 

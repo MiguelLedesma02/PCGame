@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://d2orq86btic6v"]
+[gd_scene load_steps=3 format=3 uid="uid://d2orq86btic6v"]
 
 [ext_resource type="Script" uid="uid://mjxnmnf1iafs" path="res://Scripts/Main.gd" id="1_m8x5s"]
+[ext_resource type="Script" uid="uid://b4rkgfaba3p4h" path="res://Scripts/Board.gd" id="2_idj7w"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -24,3 +25,6 @@ grow_vertical = 2
 [node name="GridContainer" type="GridContainer" parent="CenterContainer"]
 layout_mode = 2
 columns = 8
+
+[node name="Board" type="Node" parent="."]
+script = ExtResource("2_idj7w")
