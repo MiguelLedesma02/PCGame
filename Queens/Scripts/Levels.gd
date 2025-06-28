@@ -2,7 +2,8 @@ extends Control
 
 @onready var press_button_audio: AudioStreamPlayer = $MarginContainer/Levels/PressButtonAudio
 
-var menu_scene = "res://Scenes/Menu.tscn"
+const menu_scene = "res://Scenes/Menu.tscn"
+const game_scene = "res://Scenes/Game.tscn"
 
 func _on_level_1_pressed() -> void:
 	press_button_audio.playing = true
@@ -22,7 +23,7 @@ func _on_back_pressed() -> void:
 
 func load_level_scene(file: String):
 
-	var scene = preload("res://Scenes/Game.tscn").instantiate()
+	var scene = preload(game_scene).instantiate()
 	scene.colors_file = file
 	get_tree().root.add_child(scene)
 	

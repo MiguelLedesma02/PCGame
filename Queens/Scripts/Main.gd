@@ -7,7 +7,7 @@ var colors_file
 @onready var press_button_audio: AudioStreamPlayer = $BackButton/PressButtonAudio
 @onready var grid = $CenterContainer/GridContainer
 
-var levels_scene = "res://Scenes/Levels.tscn"
+const levels_scene = "res://Scenes/Levels.tscn"
 
 #Generales
 const BOARD_SIZE = 8
