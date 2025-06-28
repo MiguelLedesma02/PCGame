@@ -12,7 +12,7 @@ func _on_start_pressed() -> void:
 
 func _on_credits_pressed() -> void:
 	press_button_audio.playing = true
-	#get_tree().change_scene_to_file(credits_scene)
+	get_tree().change_scene_to_file(credits_scene)
 
 
 func _on_exit_pressed() -> void:

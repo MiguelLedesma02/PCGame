@@ -4,7 +4,10 @@ extends Control
 var colors_file
 
 #Referencias a Nodos
+@onready var press_button_audio: AudioStreamPlayer = $BackButton/PressButtonAudio
 @onready var grid = $CenterContainer/GridContainer
+
+var levels_scene = "res://Scenes/Levels.tscn"
 
 #Generales
 const BOARD_SIZE = 8
@@ -71,3 +74,7 @@ func create_cell(row: int, col: int, color: String):
 	cell.set_color(color)
 
 	return cell
+
+func _on_back_pressed() -> void:
+	press_button_audio.playing = true
+	get_tree().change_scene_to_file(levels_scene)
