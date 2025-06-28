@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dernpjykn1l6n" path="res://Scripts/Menu.gd" id="1_3kf3n"]
 [ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="2_6pedr"]
 [ext_resource type="Texture2D" uid="uid://fwkd6500xfb0" path="res://Sprites/BackgroundMenu.png" id="2_syfuq"]
-[ext_resource type="Theme" uid="uid://bk7syb0d40qhf" path="res://Themes/ButtonTheme.tres" id="4_s2c3o"]
+[ext_resource type="Theme" uid="uid://bnq0c4tcmm3r3" path="res://Themes/ButtonTheme.tres" id="4_s2c3o"]
 [ext_resource type="Script" uid="uid://dqx8534mqybbs" path="res://Scripts/ButtonController.gd" id="5_ma218"]
 [ext_resource type="AudioStream" uid="uid://b03rjhuipgfgn" path="res://Sounds/click_003.ogg" id="7_3jcrr"]
 
@@ -81,9 +81,6 @@ text = "Start"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MarginContainer/Buttons/Start"]
-stream = ExtResource("7_3jcrr")
-
 [node name="Credits" type="Button" parent="MarginContainer/Buttons" node_paths=PackedStringArray("target_label")]
 custom_minimum_size = Vector2(200, 65)
 layout_mode = 2
@@ -105,9 +102,6 @@ theme_override_font_sizes/font_size = 40
 text = "Credits"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MarginContainer/Buttons/Credits"]
-stream = ExtResource("7_3jcrr")
 
 [node name="Exit" type="Button" parent="MarginContainer/Buttons" node_paths=PackedStringArray("target_label")]
 custom_minimum_size = Vector2(200, 65)
@@ -131,7 +125,7 @@ text = "Exit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MarginContainer/Buttons/Exit"]
+[node name="PressButtonAudio" type="AudioStreamPlayer" parent="MarginContainer/Buttons"]
 stream = ExtResource("7_3jcrr")
 
 [connection signal="mouse_entered" from="MarginContainer/Buttons/Start" to="MarginContainer/Buttons/Start" method="_on_mouse_entered"]

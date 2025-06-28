@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://bcx234o5n2c2g"]
+
+[ext_resource type="Script" uid="uid://mjxnmnf1iafs" path="res://Scripts/Main.gd" id="1_gl6un"]
+[ext_resource type="Script" uid="uid://b4rkgfaba3p4h" path="res://Scripts/Board.gd" id="2_j5yw3"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_gl6un")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer"]
+layout_mode = 2
+columns = 8
+
+[node name="Board" type="Node" parent="."]
+script = ExtResource("2_j5yw3")

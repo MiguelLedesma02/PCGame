@@ -1,21 +1,20 @@
 extends Control
 
-@onready var start_audio: AudioStreamPlayer = $MarginContainer/Buttons/Start/AudioStreamPlayer
-@onready var credits_audio: AudioStreamPlayer = $MarginContainer/Buttons/Credits/AudioStreamPlayer
-@onready var exit_audio: AudioStreamPlayer = $MarginContainer/Buttons/Exit/AudioStreamPlayer
+@onready var press_button_audio: AudioStreamPlayer = $MarginContainer/Buttons/PressButtonAudio
 
-var main_scene = "res://Scenes/Main.tscn"
+var levels_scene = "res://Scenes/Levels.tscn"
+var credits_scene = "res://Scenes/Credits.tscn"
 
 func _on_start_pressed() -> void:
-	start_audio.playing = true
-	get_tree().change_scene_to_file(main_scene)
+	press_button_audio.playing = true
+	get_tree().change_scene_to_file(levels_scene)
 
 
 func _on_credits_pressed() -> void:
-	credits_audio.playing = true
-	pass # Replace with function body.
+	press_button_audio.playing = true
+	#get_tree().change_scene_to_file(credits_scene)
 
 
 func _on_exit_pressed() -> void:
-	exit_audio.playing = true
+	press_button_audio.playing = true
 	get_tree().quit()

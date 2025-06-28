@@ -1,7 +1,7 @@
 extends Control
 
 #Referencias a Archivos
-var colors_file = "res://Settings/Colors.csv"
+var colors_file
 
 #Referencias a Nodos
 @onready var grid = $CenterContainer/GridContainer
