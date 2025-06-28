@@ -3,6 +3,10 @@ extends Node
 #Referencias a Nodos
 @onready var main = get_tree().get_root().get_node("Main")
 
+@onready var background_board = $"../BackgroundBoard"
+@onready var container_board = $"../CenterContainer"
+@onready var popup_congratulations = $"../PopUpCongratulations"
+
 #Globales
 const BOARD_SIZE = 8
 var board = []
@@ -67,7 +71,7 @@ func cell_updated():
 			color_mtx.unlock()
 
 	if rows_ok == BOARD_SIZE && columns_ok == BOARD_SIZE && colors_ok == BOARD_SIZE:
-			print("Has ganado!")
+		win_game()
 
 	#Se destruyen los hilos
 	destroy_threads()
@@ -166,3 +170,9 @@ func get_color_by_id(id: int):
 		return "NARANJA C"
 	if id == 7:
 		return "NARANJA O"
+
+func win_game():
+
+	background_board.visible = false
+	container_board.visible = false
+	popup_congratulations.visible = true

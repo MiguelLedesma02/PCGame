@@ -1,11 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://bcx234o5n2c2g"]
+[gd_scene load_steps=9 format=3 uid="uid://bcx234o5n2c2g"]
 
 [ext_resource type="Script" uid="uid://mjxnmnf1iafs" path="res://Scripts/Main.gd" id="1_gl6un"]
 [ext_resource type="Script" uid="uid://b4rkgfaba3p4h" path="res://Scripts/Board.gd" id="2_j5yw3"]
 [ext_resource type="Texture2D" uid="uid://fwkd6500xfb0" path="res://Sprites/BackgroundMenu.png" id="2_kldst"]
 [ext_resource type="Texture2D" uid="uid://ckycf3xooft68" path="res://Sprites/BackgroundBoard.png" id="3_7lihs"]
+[ext_resource type="Texture2D" uid="uid://otfmpjpgsau5" path="res://Sprites/Button.png" id="4_2irst"]
 [ext_resource type="AudioStream" uid="uid://b03rjhuipgfgn" path="res://Sounds/click_003.ogg" id="4_b2bpf"]
 [ext_resource type="Theme" uid="uid://b3thp4lbcuf47" path="res://Themes/ButtonBack.tres" id="5_7lihs"]
+[ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="5_bf53h"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -37,6 +39,38 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_7lihs")
 stretch_mode = 3
+
+[node name="PopUpCongratulations" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_2irst")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="PopUpCongratulations"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("5_bf53h")
+theme_override_font_sizes/font_size = 60
+text = "¡Felicidades!
+Has superado este nivel"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
