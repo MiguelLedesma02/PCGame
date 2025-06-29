@@ -6,6 +6,7 @@ extends Node
 @onready var background_board = $"../BackgroundBoard"
 @onready var container_board = $"../CenterContainer"
 @onready var popup_congratulations = $"../PopUpCongratulations"
+@onready var undo_button = $"../UndoButton"
 
 #Globales
 const BOARD_SIZE = 8
@@ -179,4 +180,5 @@ func win_game():
 
 	background_board.visible = false
 	container_board.visible = false
+	undo_button.visible= false
 	popup_congratulations.visible = true
