@@ -22,9 +22,6 @@ var row_mtx
 var col_mtx
 var color_mtx
 
-#Temporizador
-var tiempo = 0.0
-var contando = true
 
 func _ready():
 	#Se inicializa el tablero
@@ -182,3 +179,4 @@ func win_game():
 	container_board.visible = false
 	undo_button.visible= false
 	popup_congratulations.visible = true
+	main.get_node("Timer").stop()

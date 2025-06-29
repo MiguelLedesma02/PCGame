@@ -14,6 +14,11 @@ const BOARD_SIZE = 8
 var board = []
 var colors = []
 
+#Timer
+@onready var timer_label = $TimerLabel
+@onready var game_timer = $Timer
+var time_elapsed = 0  # en segundos
+
 func _ready():
 
 	#Se obtienen los colores del tablero
@@ -85,3 +90,12 @@ func _on_undo_button_pressed() -> void:
 		for cell in row:
 			cell.clear()
 	
+
+func _on_timer_timeout() -> void:
+	time_elapsed += 1
+
+	var minutes = int(time_elapsed / 60)
+	var seconds = int(time_elapsed % 60)
+
+	var time_str = "%02d:%02d" % [minutes, seconds]
+	timer_label.text = time_str

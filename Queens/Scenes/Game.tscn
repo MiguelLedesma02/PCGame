@@ -133,19 +133,25 @@ text = "Deshacer"
 [node name="PressButtonAudio" type="AudioStreamPlayer" parent="UndoButton"]
 stream = ExtResource("4_b2bpf")
 
-[node name="TimeLabel" type="Label" parent="."]
+[node name="TimerLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -32.0
-offset_top = 30.0
+offset_left = -40.0
+offset_top = 14.0
 offset_right = 40.0
-offset_bottom = 53.0
+offset_bottom = 56.0
 grow_horizontal = 2
-text = "mm:ss"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "00:00"
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
 
 [connection signal="mouse_entered" from="BackButton/Back" to="BackButton/Back" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="BackButton/Back" to="BackButton/Back" method="_on_mouse_exited"]
 [connection signal="pressed" from="BackButton/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="UndoButton" to="." method="_on_undo_button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

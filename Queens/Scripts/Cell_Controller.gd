@@ -13,6 +13,7 @@ var color: String
 var has_crown := false
 var has_cross := false
 
+
 func _ready():
 
 	crown.visible = has_crown
