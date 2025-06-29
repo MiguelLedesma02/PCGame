@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://hkqqjhsi51pw"]
 
 [ext_resource type="Script" uid="uid://dpt8x0u7erg05" path="res://Scripts/Credits.gd" id="1_f64u0"]
-[ext_resource type="Texture2D" uid="uid://fwkd6500xfb0" path="res://Sprites/BackgroundMenu.png" id="2_uy3b0"]
+[ext_resource type="Texture2D" uid="uid://dsvf0k25rqwiq" path="res://Sprites/BackgroundMenu 2.png" id="2_iynit"]
 [ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="3_iynit"]
 [ext_resource type="Theme" uid="uid://b3thp4lbcuf47" path="res://Themes/ButtonBack.tres" id="4_f64u0"]
 [ext_resource type="AudioStream" uid="uid://b03rjhuipgfgn" path="res://Sounds/click_003.ogg" id="6_640q4"]
@@ -22,7 +22,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_uy3b0")
+texture = ExtResource("2_iynit")
 expand_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -30,6 +30,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -242.0
+offset_top = 2.0
+offset_right = 255.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 400

@@ -21,6 +21,10 @@ var row_mtx
 var col_mtx
 var color_mtx
 
+#Temporizador
+var tiempo = 0.0
+var contando = true
+
 func _ready():
 	#Se inicializa el tablero
 	board = main.get_board()

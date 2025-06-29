@@ -78,3 +78,10 @@ func create_cell(row: int, col: int, color: String):
 func _on_back_pressed() -> void:
 	press_button_audio.playing = true
 	get_tree().change_scene_to_file(levels_scene)
+
+
+func _on_undo_button_pressed() -> void:
+	for row in board:
+		for cell in row:
+			cell.clear()
+	

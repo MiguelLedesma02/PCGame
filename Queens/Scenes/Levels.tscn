@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://1tvio4vhxf5o"]
 
 [ext_resource type="Script" uid="uid://ig30wonn554n" path="res://Scripts/Levels.gd" id="1_d2m4p"]
-[ext_resource type="Texture2D" uid="uid://fwkd6500xfb0" path="res://Sprites/BackgroundMenu.png" id="2_c3ead"]
+[ext_resource type="Texture2D" uid="uid://dsvf0k25rqwiq" path="res://Sprites/BackgroundMenu 2.png" id="2_c3ead"]
 [ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="3_5etrs"]
 [ext_resource type="Theme" uid="uid://bk7syb0d40qhf" path="res://Themes/ButtonLevelTheme.tres" id="4_hcimt"]
 [ext_resource type="Script" uid="uid://dqx8534mqybbs" path="res://Scripts/ButtonController.gd" id="5_t75go"]
@@ -50,7 +50,7 @@ size_flags_horizontal = 4
 theme_override_constants/outline_size = 15
 theme_override_fonts/font = ExtResource("3_5etrs")
 theme_override_font_sizes/font_size = 70
-text = "Elije un nivel"
+text = "Elige un nivel"
 horizontal_alignment = 1
 vertical_alignment = 1
 

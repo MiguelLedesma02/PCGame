@@ -1,13 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://bcx234o5n2c2g"]
+[gd_scene load_steps=10 format=3 uid="uid://bcx234o5n2c2g"]
 
 [ext_resource type="Script" uid="uid://mjxnmnf1iafs" path="res://Scripts/Main.gd" id="1_gl6un"]
+[ext_resource type="Texture2D" uid="uid://cam4mv87iqwaw" path="res://Sprites/BackGroundGame.png" id="2_2irst"]
 [ext_resource type="Script" uid="uid://b4rkgfaba3p4h" path="res://Scripts/Board.gd" id="2_j5yw3"]
-[ext_resource type="Texture2D" uid="uid://fwkd6500xfb0" path="res://Sprites/BackgroundMenu.png" id="2_kldst"]
 [ext_resource type="Texture2D" uid="uid://ckycf3xooft68" path="res://Sprites/BackgroundBoard.png" id="3_7lihs"]
 [ext_resource type="Texture2D" uid="uid://otfmpjpgsau5" path="res://Sprites/Button.png" id="4_2irst"]
 [ext_resource type="AudioStream" uid="uid://b03rjhuipgfgn" path="res://Sounds/click_003.ogg" id="4_b2bpf"]
 [ext_resource type="Theme" uid="uid://b3thp4lbcuf47" path="res://Themes/ButtonBack.tres" id="5_7lihs"]
 [ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="5_bf53h"]
+[ext_resource type="Theme" uid="uid://bnq0c4tcmm3r3" path="res://Themes/ButtonTheme.tres" id="9_bf53h"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -27,7 +28,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_kldst")
+texture = ExtResource("2_2irst")
 expand_mode = 2
 
 [node name="BackgroundBoard" type="TextureRect" parent="."]
@@ -114,6 +115,37 @@ size_flags_horizontal = 4
 theme = ExtResource("5_7lihs")
 theme_override_font_sizes/font_size = 40
 
+[node name="UndoButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 34.0
+offset_top = -96.0
+offset_right = 223.0
+offset_bottom = -33.0
+grow_vertical = 0
+theme = ExtResource("9_bf53h")
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 34
+text = "Deshacer"
+
+[node name="PressButtonAudio" type="AudioStreamPlayer" parent="UndoButton"]
+stream = ExtResource("4_b2bpf")
+
+[node name="TimeLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -32.0
+offset_top = 30.0
+offset_right = 40.0
+offset_bottom = 53.0
+grow_horizontal = 2
+text = "mm:ss"
+
 [connection signal="mouse_entered" from="BackButton/Back" to="BackButton/Back" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="BackButton/Back" to="BackButton/Back" method="_on_mouse_exited"]
 [connection signal="pressed" from="BackButton/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="UndoButton" to="." method="_on_undo_button_pressed"]

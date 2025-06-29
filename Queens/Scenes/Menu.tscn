@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dernpjykn1l6n" path="res://Scripts/Menu.gd" id="1_3kf3n"]
 [ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="2_6pedr"]
-[ext_resource type="Texture2D" uid="uid://fwkd6500xfb0" path="res://Sprites/BackgroundMenu.png" id="2_syfuq"]
+[ext_resource type="Texture2D" uid="uid://dsvf0k25rqwiq" path="res://Sprites/BackgroundMenu 2.png" id="2_idohh"]
 [ext_resource type="Theme" uid="uid://bnq0c4tcmm3r3" path="res://Themes/ButtonTheme.tres" id="4_s2c3o"]
 [ext_resource type="Script" uid="uid://dqx8534mqybbs" path="res://Scripts/ButtonController.gd" id="5_ma218"]
 [ext_resource type="AudioStream" uid="uid://b03rjhuipgfgn" path="res://Sounds/click_003.ogg" id="7_3jcrr"]
@@ -23,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_syfuq")
+texture = ExtResource("2_idohh")
 expand_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

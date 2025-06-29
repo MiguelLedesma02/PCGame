@@ -50,6 +50,15 @@ func _on_right_pressed():
 		has_crown = false
 		crown.visible = has_crown
 
+func clear():
+	if has_crown:
+		has_crown = false
+		crown.visible = has_crown
+	elif has_cross:
+		has_cross = false
+		cross.visible = has_cross
+	
+
 func set_color(c: String):
 
 	color = c
