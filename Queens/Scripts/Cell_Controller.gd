@@ -5,6 +5,7 @@ extends Button
 @onready var color_rect = $ColorRect
 @onready var crown = $Crown
 @onready var cross = $Cross
+@onready var red_crown = $RedCrown
 
 #Generales
 var row: int
@@ -12,12 +13,14 @@ var col: int
 var color: String
 var has_crown := false
 var has_cross := false
+var crown_invalid := false
 
 
 func _ready():
 
 	crown.visible = has_crown
 	cross.visible = has_cross
+	red_crown.visible = false
 
 func _gui_input(event):
 
@@ -35,6 +38,7 @@ func _on_left_pressed():
 
 	#Se coloca la corona y se quita la cruz
 	has_crown = !has_crown
+	resetCrown()
 	crown.visible = has_crown
 	if has_cross:
 		has_cross = false
@@ -55,6 +59,7 @@ func clear():
 	if has_crown:
 		has_crown = false
 		crown.visible = has_crown
+		resetCrown()
 	elif has_cross:
 		has_cross = false
 		cross.visible = has_cross
@@ -86,3 +91,21 @@ func getColor():
 
 func getHasCrown():
 	return has_crown
+	
+func resetCrown():
+	if has_crown:
+		crown.visible = true
+		red_crown.visible = false
+	else:
+		crown.visible = false
+		red_crown.visible = false
+	crown_invalid = false
+
+func setCrownInvalid():
+	if has_crown:
+		print("⚠️ Conflicto de corona en fila ", row, ", columna ", col)
+		
+		crown.visible = false
+		red_crown.visible = true
+		
+		crown_invalid = true

@@ -16,12 +16,16 @@ var board = []
 var row_threads = []
 var col_threads = []
 var color_threads = []
+var diag_threads = []
+
+# Almacena posiciones conflictivas detectadas por cada tipo de validación
+var invalid_positions = []
 
 #Mutex de Hilos
 var row_mtx
 var col_mtx
 var color_mtx
-
+var diag_mtx
 
 func _ready():
 	#Se inicializa el tablero
@@ -32,13 +36,24 @@ func _ready():
 
 func cell_updated():
 	
-	var only_one_crown_row = false
-	var only_one_crown_col = false
-	var only_one_crown_color = false
+	#var only_one_crown_row = false
+	#var only_one_crown_col = false
+	#var only_one_crown_color = false
+	
+	reset_all_crowns_color()
 
 	var rows_ok = 0
 	var columns_ok = 0
 	var colors_ok = 0
+	var diagonals_ok = 0
+	
+	# Resultados de cada hilo - Es un diccionario del tipo {valid, invalid_positions}
+	var row_results = []
+	var col_results = []
+	var color_results = []
+	var diag_results = []
+	
+	invalid_positions.clear()
 
 	#Se crean los hilos
 	create_threads()
@@ -48,35 +63,67 @@ func cell_updated():
 		row_threads[i].start(count_crowns_in_row.bind(i))
 		col_threads[i].start(count_crowns_in_column.bind(i))
 		color_threads[i].start(count_crowns_in_color.bind(i))
+		diag_threads[i].start(validate_diagonals.bind(i))
 
 	for i in range(BOARD_SIZE):
 
 		if row_threads[i].is_started():
 			row_mtx.lock()
-			only_one_crown_row = row_threads[i].wait_to_finish()
-			if only_one_crown_row:
-				rows_ok += 1
+			var row_result = row_threads[i].wait_to_finish()
+			row_results.append(row_result)
 			row_mtx.unlock()
 
 		if col_threads[i].is_started():
 			col_mtx.lock()
-			only_one_crown_col = col_threads[i].wait_to_finish()
-			if only_one_crown_col:
-				columns_ok += 1
+			var col_result = col_threads[i].wait_to_finish()
+			col_results.append(col_result)
 			col_mtx.unlock()
 
 		if color_threads[i].is_started():
 			color_mtx.lock()
-			only_one_crown_color = color_threads[i].wait_to_finish()
-			if only_one_crown_color:
-				colors_ok += 1
+			var color_result = color_threads[i].wait_to_finish()
+			color_results.append(color_result)
 			color_mtx.unlock()
-
-	if rows_ok == BOARD_SIZE && columns_ok == BOARD_SIZE && colors_ok == BOARD_SIZE:
-		win_game()
-
-	#Se destruyen los hilos
+			
+		if diag_threads[i].is_started():
+			diag_mtx.lock()
+			var diag_result = diag_threads[i].wait_to_finish()
+			diag_results.append(diag_result)
+			diag_mtx.unlock()
+	
 	destroy_threads()
+	
+	# Procesar resultados: marcar coronas inválidas y contar OK
+	# Cada resultado es un dict con keys:
+	#   "valid" : bool
+	#   "invalid_positions" : Array of Vector2(row, col)
+	
+	for i in range(BOARD_SIZE):
+		if i < row_results.size():
+			if row_results[i]["valid"]:
+				rows_ok += 1
+			else:
+				invalid_positions.append_array(row_results[i]["invalid_positions"])
+		if i < col_results.size():
+			if col_results[i]["valid"]:
+				columns_ok += 1
+			else:
+				invalid_positions.append_array(col_results[i]["invalid_positions"])
+		if i < color_results.size():
+			if color_results[i]["valid"]:
+				colors_ok += 1
+			else:
+				invalid_positions.append_array(color_results[i]["invalid_positions"])
+		if i < diag_results.size():
+			if diag_results[i]["valid"]:
+				diagonals_ok += 1
+			else:
+				invalid_positions.append_array(diag_results[i]["invalid_positions"])
+
+	mark_invalid_crowns(invalid_positions)
+
+	if rows_ok == BOARD_SIZE && columns_ok == BOARD_SIZE && colors_ok == BOARD_SIZE and diagonals_ok == BOARD_SIZE:
+		win_game()
 
 	return
 
@@ -86,6 +133,7 @@ func create_threads():
 		row_threads.append(Thread.new())
 		col_threads.append(Thread.new())
 		color_threads.append(Thread.new())
+		diag_threads.append(Thread.new())
 
 	return
 
@@ -94,6 +142,7 @@ func destroy_threads():
 	row_threads.clear()
 	col_threads.clear()
 	color_threads.clear()
+	diag_threads.clear()
 
 	return
 
@@ -102,12 +151,13 @@ func create_mutex():
 	row_mtx = Mutex.new()
 	col_mtx = Mutex.new()
 	color_mtx = Mutex.new()
+	diag_mtx = Mutex.new()
 
 	return
 
 func count_crowns_in_row(row: int):
 
-	var one_crown = false
+	var invalid_pos = []
 	var crowns = 0
 
 	for i in range(BOARD_SIZE):
@@ -115,14 +165,19 @@ func count_crowns_in_row(row: int):
 		if board[row][i].getHasCrown():
 			crowns = crowns + 1
 
-	if crowns == 1:
-		one_crown = true
+	if crowns > 1:
+		for i in range(BOARD_SIZE):
+			if board[row][i].getHasCrown():
+				invalid_pos.append(Vector2(row, i))
 
-	return one_crown
+	return {
+		"valid": crowns == 1,
+		"invalid_positions": invalid_pos
+	}
 
 func count_crowns_in_column(col: int):
 
-	var one_crown = false
+	var invalid_pos = []
 	var crowns = 0
 
 	for i in range(BOARD_SIZE):
@@ -130,14 +185,19 @@ func count_crowns_in_column(col: int):
 		if board[i][col].getHasCrown():
 			crowns = crowns + 1
 
-	if crowns == 1:
-		one_crown = true
+	if crowns > 1:
+		for i in range(BOARD_SIZE):
+			if board[i][col].getHasCrown():
+				invalid_pos.append(Vector2(i, col))
 
-	return one_crown
+	return {
+		"valid": crowns == 1,
+		"invalid_positions": invalid_pos
+	}
 
 func count_crowns_in_color(c: int):
 
-	var one_crown = false
+	var invalid_pos = []
 	var crowns = 0
 	var color
 	
@@ -149,10 +209,51 @@ func count_crowns_in_color(c: int):
 			if board[i][j].getColor() == color && board[i][j].getHasCrown():
 				crowns = crowns + 1
 
-	if crowns == 1:
-		one_crown = true
+	if crowns > 1:
+		for i in range(BOARD_SIZE):
+			for j in range(BOARD_SIZE):
+				if board[i][j].getColor() == color and board[i][j].getHasCrown():
+					invalid_pos.append(Vector2(i, j))
 
-	return one_crown
+	return {
+		"valid": crowns == 1,
+		"invalid_positions": invalid_pos
+	}
+
+func validate_diagonals(row: int):
+	var invalid_pos = []
+	var conflicts_found = false
+
+	for col in range(BOARD_SIZE):
+		if board[row][col].getHasCrown():
+			# Revisar diagonales adyacentes
+			var diagonals = [
+				Vector2(row - 1, col - 1),
+				Vector2(row - 1, col + 1),
+				Vector2(row + 1, col - 1),
+				Vector2(row + 1, col + 1)
+			]
+
+			for d in diagonals:
+				var r = int(d.x)
+				var c = int(d.y)
+				if r >= 0 and r < BOARD_SIZE and c >= 0 and c < BOARD_SIZE:
+					if board[r][c].getHasCrown():
+						conflicts_found = true
+						# Agregamos ambas posiciones conflictivas
+						invalid_pos.append(Vector2(row, col))
+						invalid_pos.append(Vector2(r, c))
+
+	# Eliminamos duplicados en invalid_pos
+	var unique_pos = []
+	for pos in invalid_pos:
+		if not unique_pos.has(pos):
+			unique_pos.append(pos)
+
+	return {
+		"valid": not conflicts_found,
+		"invalid_positions": unique_pos
+	}
 
 func get_color_by_id(id: int):
 
@@ -180,3 +281,17 @@ func win_game():
 	undo_button.visible= false
 	popup_congratulations.visible = true
 	main.get_node("Timer").stop()
+	
+func reset_all_crowns_color():
+	for row in range(BOARD_SIZE):
+		for col in range(BOARD_SIZE):
+			if board[row][col].getHasCrown():
+				board[row][col].resetCrown()
+				
+func mark_invalid_crowns(positions: Array):
+	# Marca las coronas en las posiciones dadas como inválidas (rojas)
+	for pos in positions:
+		var r = int(pos.x)
+		var c = int(pos.y)
+		if board[r][c].getHasCrown():
+			board[r][c].setCrownInvalid()
