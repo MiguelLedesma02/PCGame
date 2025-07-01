@@ -36,8 +36,14 @@ func _on_left_pressed():
 
 	var board = main.get_node("Board")
 
+	if !has_crown:
+		AudioManager.play_put_crown_sound()
+	else:
+		AudioManager.play_quit_crown_sound()
+
 	#Se coloca la corona y se quita la cruz
 	has_crown = !has_crown
+
 	resetCrown()
 	crown.visible = has_crown
 	if has_cross:
@@ -48,8 +54,12 @@ func _on_left_pressed():
 
 func _on_right_pressed():
 
+	if has_crown:
+		AudioManager.play_quit_crown_sound()
+
 	#Se coloca la cruz y se quita la corona
 	has_cross = !has_cross
+
 	cross.visible = has_cross
 	if has_crown:
 		has_crown = false
@@ -103,7 +113,6 @@ func resetCrown():
 
 func setCrownInvalid():
 	if has_crown:
-		print("⚠️ Conflicto de corona en fila ", row, ", columna ", col)
 		
 		crown.visible = false
 		red_crown.visible = true

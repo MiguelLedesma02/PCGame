@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://hkqqjhsi51pw"]
+[gd_scene load_steps=5 format=3 uid="uid://hkqqjhsi51pw"]
 
 [ext_resource type="Script" uid="uid://dpt8x0u7erg05" path="res://Scripts/Credits.gd" id="1_f64u0"]
 [ext_resource type="Texture2D" uid="uid://dsvf0k25rqwiq" path="res://Sprites/BackgroundMenu 2.png" id="2_iynit"]
 [ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="3_iynit"]
 [ext_resource type="Theme" uid="uid://b3thp4lbcuf47" path="res://Themes/ButtonBack.tres" id="4_f64u0"]
-[ext_resource type="AudioStream" uid="uid://b03rjhuipgfgn" path="res://Sounds/click_003.ogg" id="6_640q4"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -150,9 +149,6 @@ grow_vertical = 0
 size_flags_horizontal = 8
 size_flags_vertical = 8
 theme_override_constants/separation = 25
-
-[node name="PressButtonAudio" type="AudioStreamPlayer" parent="BackButton"]
-stream = ExtResource("6_640q4")
 
 [node name="Back" type="Button" parent="BackButton"]
 custom_minimum_size = Vector2(60, 60)

@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://bc4ogybxkmpcy"]
+
+[ext_resource type="Script" uid="uid://cvvbiljpe6xq5" path="res://Scripts/AudioManager.gd" id="1_i2xd5"]
+[ext_resource type="AudioStream" uid="uid://b03rjhuipgfgn" path="res://Sounds/click_003.ogg" id="2_u6owb"]
+[ext_resource type="AudioStream" uid="uid://b5y4275i178qf" path="res://Sounds/bong_001.ogg" id="3_u6owb"]
+[ext_resource type="AudioStream" uid="uid://bdhve35exl626" path="res://Sounds/drop_003.ogg" id="4_yq78e"]
+
+[node name="AudioManager" type="Node"]
+script = ExtResource("1_i2xd5")
+
+[node name="PressButtonAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_u6owb")
+
+[node name="PutCrownAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_u6owb")
+
+[node name="QuitCrownAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_yq78e")

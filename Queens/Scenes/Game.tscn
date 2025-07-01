@@ -5,9 +5,9 @@
 [ext_resource type="Script" uid="uid://b4rkgfaba3p4h" path="res://Scripts/Board.gd" id="2_j5yw3"]
 [ext_resource type="Texture2D" uid="uid://ckycf3xooft68" path="res://Sprites/BackgroundBoard.png" id="3_7lihs"]
 [ext_resource type="Texture2D" uid="uid://otfmpjpgsau5" path="res://Sprites/Button.png" id="4_2irst"]
-[ext_resource type="AudioStream" uid="uid://b03rjhuipgfgn" path="res://Sounds/click_003.ogg" id="4_b2bpf"]
 [ext_resource type="Theme" uid="uid://b3thp4lbcuf47" path="res://Themes/ButtonBack.tres" id="5_7lihs"]
 [ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="5_bf53h"]
+[ext_resource type="Script" uid="uid://dqx8534mqybbs" path="res://Scripts/ButtonController.gd" id="9_71axn"]
 [ext_resource type="Theme" uid="uid://bnq0c4tcmm3r3" path="res://Themes/ButtonTheme.tres" id="9_bf53h"]
 
 [node name="Main" type="Control"]
@@ -105,9 +105,6 @@ size_flags_horizontal = 8
 size_flags_vertical = 8
 theme_override_constants/separation = 25
 
-[node name="PressButtonAudio" type="AudioStreamPlayer" parent="BackButton"]
-stream = ExtResource("4_b2bpf")
-
 [node name="Back" type="Button" parent="BackButton"]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
@@ -115,7 +112,7 @@ size_flags_horizontal = 4
 theme = ExtResource("5_7lihs")
 theme_override_font_sizes/font_size = 40
 
-[node name="UndoButton" type="Button" parent="."]
+[node name="UndoButton" type="Button" parent="." node_paths=PackedStringArray("target_label")]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -126,12 +123,21 @@ offset_right = 223.0
 offset_bottom = -33.0
 grow_vertical = 0
 theme = ExtResource("9_bf53h")
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 34
-text = "Deshacer"
+script = ExtResource("9_71axn")
+target_label = NodePath("Label")
 
-[node name="PressButtonAudio" type="AudioStreamPlayer" parent="UndoButton"]
-stream = ExtResource("4_b2bpf")
+[node name="Label" type="Label" parent="UndoButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 40
+text = "Delete"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TimerLabel" type="Label" parent="."]
 layout_mode = 1
@@ -153,5 +159,7 @@ autostart = true
 [connection signal="mouse_entered" from="BackButton/Back" to="BackButton/Back" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="BackButton/Back" to="BackButton/Back" method="_on_mouse_exited"]
 [connection signal="pressed" from="BackButton/Back" to="." method="_on_back_pressed"]
+[connection signal="mouse_entered" from="UndoButton" to="UndoButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="UndoButton" to="UndoButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="UndoButton" to="." method="_on_undo_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

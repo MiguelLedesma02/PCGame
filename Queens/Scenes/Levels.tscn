@@ -1,11 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://1tvio4vhxf5o"]
+[gd_scene load_steps=7 format=3 uid="uid://1tvio4vhxf5o"]
 
 [ext_resource type="Script" uid="uid://ig30wonn554n" path="res://Scripts/Levels.gd" id="1_d2m4p"]
 [ext_resource type="Texture2D" uid="uid://dsvf0k25rqwiq" path="res://Sprites/BackgroundMenu 2.png" id="2_c3ead"]
 [ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="3_5etrs"]
 [ext_resource type="Theme" uid="uid://bk7syb0d40qhf" path="res://Themes/ButtonLevelTheme.tres" id="4_hcimt"]
 [ext_resource type="Script" uid="uid://dqx8534mqybbs" path="res://Scripts/ButtonController.gd" id="5_t75go"]
-[ext_resource type="AudioStream" uid="uid://b03rjhuipgfgn" path="res://Sounds/click_003.ogg" id="6_snmgm"]
 [ext_resource type="Theme" uid="uid://b3thp4lbcuf47" path="res://Themes/ButtonBack.tres" id="7_c3ead"]
 
 [node name="Control" type="Control"]
@@ -82,9 +81,6 @@ text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MarginContainer/Levels/Level1"]
-stream = ExtResource("6_snmgm")
-
 [node name="Level2" type="Button" parent="MarginContainer/Levels" node_paths=PackedStringArray("target_label")]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
@@ -107,9 +103,6 @@ text = "2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MarginContainer/Levels/Level2"]
-stream = ExtResource("6_snmgm")
-
 [node name="Level3" type="Button" parent="MarginContainer/Levels" node_paths=PackedStringArray("target_label")]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
@@ -131,12 +124,6 @@ theme_override_font_sizes/font_size = 40
 text = "3"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MarginContainer/Levels/Level3"]
-stream = ExtResource("6_snmgm")
-
-[node name="PressButtonAudio" type="AudioStreamPlayer" parent="MarginContainer/Levels"]
-stream = ExtResource("6_snmgm")
 
 [node name="BackButton" type="VBoxContainer" parent="."]
 layout_mode = 1
