@@ -7,10 +7,12 @@ extends Node
 @onready var container_board = $"../CenterContainer"
 @onready var popup_congratulations = $"../PopUpCongratulations"
 @onready var undo_button = $"../UndoButton"
+@onready var timer_scene = get_tree().get_root().get_node("Main")
 
 #Globales
 const BOARD_SIZE = 8
 var board = []
+var tiempo_juego = 0.0
 
 #Vectores de Hilos
 var row_threads = []
@@ -30,7 +32,7 @@ var diag_mtx
 func _ready():
 	#Se inicializa el tablero
 	board = main.get_board()
-	
+	$AudioStreamPlayer.play()
 	#Se crean los semáforos
 	create_mutex()
 
@@ -295,3 +297,9 @@ func mark_invalid_crowns(positions: Array):
 		var c = int(pos.y)
 		if board[r][c].getHasCrown():
 			board[r][c].setCrownInvalid()
+			
+func _process(delta):
+	var tiempo_juego = timer_scene.time_elapsed
+	var nuevo_pitch = 1.0 + (tiempo_juego / 60.0) * 0.5
+	$AudioStreamPlayer.pitch_scale = clamp(nuevo_pitch, 1.0, 1.5)
+			

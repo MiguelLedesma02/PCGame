@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bcx234o5n2c2g"]
+[gd_scene load_steps=11 format=3 uid="uid://bcx234o5n2c2g"]
 
 [ext_resource type="Script" uid="uid://mjxnmnf1iafs" path="res://Scripts/Main.gd" id="1_gl6un"]
 [ext_resource type="Texture2D" uid="uid://cam4mv87iqwaw" path="res://Sprites/BackGroundGame.png" id="2_2irst"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://otfmpjpgsau5" path="res://Sprites/Button.png" id="4_2irst"]
 [ext_resource type="Theme" uid="uid://b3thp4lbcuf47" path="res://Themes/ButtonBack.tres" id="5_7lihs"]
 [ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="5_bf53h"]
+[ext_resource type="AudioStream" uid="uid://dog331cbyoxrv" path="res://Sounds/game_sound.mp3" id="7_71axn"]
 [ext_resource type="Script" uid="uid://dqx8534mqybbs" path="res://Scripts/ButtonController.gd" id="9_71axn"]
 [ext_resource type="Theme" uid="uid://bnq0c4tcmm3r3" path="res://Themes/ButtonTheme.tres" id="9_bf53h"]
 
@@ -87,6 +88,9 @@ columns = 8
 
 [node name="Board" type="Node" parent="."]
 script = ExtResource("2_j5yw3")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Board"]
+stream = ExtResource("7_71axn")
 
 [node name="BackButton" type="VBoxContainer" parent="."]
 layout_mode = 1
