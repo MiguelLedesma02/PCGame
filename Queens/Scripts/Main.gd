@@ -5,6 +5,11 @@ var colors_file
 
 #Referencias a Nodos
 @onready var grid = $CenterContainer/GridContainer
+@onready var help_popup = $HelpPopUp
+@onready var undo_button = $UndoButton
+@onready var help_button = $HelpButton
+@onready var back_button = $BackButton/Back
+
 
 const levels_scene = "res://Scenes/Levels.tscn"
 
@@ -99,3 +104,17 @@ func _on_timer_timeout() -> void:
 
 	var time_str = "%02d:%02d" % [minutes, seconds]
 	timer_label.text = time_str
+
+
+func _on_help_pressed() -> void:
+	help_popup.visible = true
+	help_button.disabled = true
+	back_button.disabled = true
+	undo_button.disabled = true
+
+
+func _on_continue_button_pressed() -> void:
+	help_popup.visible = false
+	help_button.disabled = false
+	back_button.disabled = false
+	undo_button.disabled = false

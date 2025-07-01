@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bcx234o5n2c2g"]
+[gd_scene load_steps=12 format=3 uid="uid://bcx234o5n2c2g"]
 
 [ext_resource type="Script" uid="uid://mjxnmnf1iafs" path="res://Scripts/Main.gd" id="1_gl6un"]
 [ext_resource type="Texture2D" uid="uid://cam4mv87iqwaw" path="res://Sprites/BackGroundGame.png" id="2_2irst"]
@@ -10,6 +10,11 @@
 [ext_resource type="AudioStream" uid="uid://dog331cbyoxrv" path="res://Sounds/game_sound.mp3" id="7_71axn"]
 [ext_resource type="Script" uid="uid://dqx8534mqybbs" path="res://Scripts/ButtonController.gd" id="9_71axn"]
 [ext_resource type="Theme" uid="uid://bnq0c4tcmm3r3" path="res://Themes/ButtonTheme.tres" id="9_bf53h"]
+[ext_resource type="Theme" uid="uid://c8d3qlywhckrx" path="res://Themes/ButtonHelpTheme.tres" id="10_71axn"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_71axn"]
+texture = ExtResource("4_2irst")
+region_rect = Rect2(85.4592, 338.349, 853.106, 346.651)
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -127,6 +132,7 @@ offset_right = 223.0
 offset_bottom = -33.0
 grow_vertical = 0
 theme = ExtResource("9_bf53h")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_71axn")
 script = ExtResource("9_71axn")
 target_label = NodePath("Label")
 
@@ -160,6 +166,89 @@ text = "00:00"
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 
+[node name="HelpButton" type="Button" parent="."]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 1183.0
+offset_top = 526.0
+offset_right = 1255.0
+offset_bottom = 599.0
+size_flags_horizontal = 8
+theme = ExtResource("10_71axn")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+
+[node name="HelpPopUp" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(634, 330)
+scale = Vector2(1.28418, 1.61279)
+texture = ExtResource("4_2irst")
+
+[node name="Instrucciones" type="Label" parent="HelpPopUp"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -877.214
+offset_top = -675.071
+offset_right = -103.214
+offset_bottom = -369.071
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bf53h")
+theme_override_font_sizes/font_size = 17
+text = "● El objetivo es tener exactamente una corona en cada fila, columna y región de color.
+
+● Clic izquierdo para colocar una corona. Otro clic para quitarla.
+
+● Clic derecho para colocar una X. Usa X para marcar donde no debe colocarse una corona.
+
+● Las coronas no pueden tocarse, ni siquiera en diagonal."
+vertical_alignment = 1
+
+[node name="Titulo" type="Label" parent="HelpPopUp"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -903.69
+offset_top = -680.031
+offset_right = -129.69
+offset_bottom = -571.031
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("5_bf53h")
+theme_override_font_sizes/font_size = 20
+text = "Cómo jugar"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="HelpPopUp" node_paths=PackedStringArray("target_label")]
+offset_left = -71.6411
+offset_top = 86.8059
+offset_right = 60.3589
+offset_bottom = 122.806
+theme = ExtResource("9_bf53h")
+script = ExtResource("9_71axn")
+target_label = NodePath("Label")
+
+[node name="Label" type="Label" parent="HelpPopUp/ContinueButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 20
+text = "Continue"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="mouse_entered" from="BackButton/Back" to="BackButton/Back" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="BackButton/Back" to="BackButton/Back" method="_on_mouse_exited"]
 [connection signal="pressed" from="BackButton/Back" to="." method="_on_back_pressed"]
@@ -167,3 +256,7 @@ autostart = true
 [connection signal="mouse_exited" from="UndoButton" to="UndoButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="UndoButton" to="." method="_on_undo_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="HelpButton" to="." method="_on_help_pressed"]
+[connection signal="mouse_entered" from="HelpPopUp/ContinueButton" to="HelpPopUp/ContinueButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="HelpPopUp/ContinueButton" to="HelpPopUp/ContinueButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="HelpPopUp/ContinueButton" to="." method="_on_continue_button_pressed"]
