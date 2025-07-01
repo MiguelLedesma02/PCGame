@@ -283,6 +283,8 @@ func win_game():
 	undo_button.visible= false
 	popup_congratulations.visible = true
 	main.get_node("Timer").stop()
+	enviar_intento_a_gsheets("ganó", timer_scene.time_elapsed)
+
 	
 func reset_all_crowns_color():
 	for row in range(BOARD_SIZE):
@@ -302,4 +304,21 @@ func _process(delta):
 	var tiempo_juego = timer_scene.time_elapsed
 	var nuevo_pitch = 1.0 + (tiempo_juego / 60.0) * 0.5
 	$AudioStreamPlayer.pitch_scale = clamp(nuevo_pitch, 1.0, 1.5)
-			
+		
+func enviar_intento_a_gsheets(resultado: String, tiempo: int):
+	var data = {
+		"jugador": "Jugador 1",
+		"resultado": resultado,
+		"tiempo": tiempo,
+		"detalles": "Intento desde Godot"
+	}
+	
+	var json_data = JSON.stringify(data)
+	var url = "https://script.google.com/macros/s/AKfycbxeDrmfad-CVwbeJ73dk_2fGG0TACWjNaF_03R3V1Kh2W3DfyG5ZLb-c3-mIwz1GHA4/exec"
+
+	$HTTPRequest.request(
+		url,
+		["Content-Type: application/json"],
+		HTTPClient.METHOD_POST,
+		json_data
+	)

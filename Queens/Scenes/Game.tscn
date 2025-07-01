@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bcx234o5n2c2g"]
+[gd_scene load_steps=13 format=3 uid="uid://bcx234o5n2c2g"]
 
 [ext_resource type="Script" uid="uid://mjxnmnf1iafs" path="res://Scripts/Main.gd" id="1_gl6un"]
 [ext_resource type="Texture2D" uid="uid://cam4mv87iqwaw" path="res://Sprites/BackGroundGame.png" id="2_2irst"]
@@ -96,6 +96,8 @@ script = ExtResource("2_j5yw3")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Board"]
 stream = ExtResource("7_71axn")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="Board"]
 
 [node name="BackButton" type="VBoxContainer" parent="."]
 layout_mode = 1
