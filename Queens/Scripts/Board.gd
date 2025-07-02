@@ -14,7 +14,7 @@ extends Node
 #Globales
 const BOARD_SIZE = 8
 var board = []
-var tiempo_juego = 0.0
+var game_time = 0.0
 const url_sheet = "https://script.google.com/macros/s/AKfycbxeDrmfad-CVwbeJ73dk_2fGG0TACWjNaF_03R3V1Kh2W3DfyG5ZLb-c3-mIwz1GHA4/exec"
 
 #Vectores de Hilos
@@ -31,6 +31,12 @@ var row_mtx
 var col_mtx
 var color_mtx
 var diag_mtx
+var invalid_positions_mtx
+
+var rows_ok = 0
+var columns_ok = 0
+var colors_ok = 0
+var diagonals_ok = 0
 
 func _ready():
 	#Se inicializa el tablero
@@ -40,19 +46,12 @@ func _ready():
 	create_mutex()
 
 func cell_updated():
+	rows_ok = 0
+	columns_ok = 0
+	colors_ok = 0
+	diagonals_ok = 0
 	
 	reset_all_crowns_color()
-
-	var rows_ok = 0
-	var columns_ok = 0
-	var colors_ok = 0
-	var diagonals_ok = 0
-	
-	# Resultados de cada hilo - Es un diccionario del tipo {valid, invalid_positions}
-	var row_results = []
-	var col_results = []
-	var color_results = []
-	var diag_results = []
 	
 	invalid_positions.clear()
 
@@ -66,64 +65,16 @@ func cell_updated():
 		color_threads[i].start(count_crowns_in_color.bind(i))
 		diag_threads[i].start(validate_diagonals.bind(i))
 		
-	#Espera y guarda los resultados
 	for i in range(BOARD_SIZE):
-
-		if row_threads[i].is_started():
-			row_mtx.lock()
-			var row_result = row_threads[i].wait_to_finish()
-			row_results.append(row_result)
-			row_mtx.unlock()
-
-		if col_threads[i].is_started():
-			col_mtx.lock()
-			var col_result = col_threads[i].wait_to_finish()
-			col_results.append(col_result)
-			col_mtx.unlock()
-
-		if color_threads[i].is_started():
-			color_mtx.lock()
-			var color_result = color_threads[i].wait_to_finish()
-			color_results.append(color_result)
-			color_mtx.unlock()
-			
-		if diag_threads[i].is_started():
-			diag_mtx.lock()
-			var diag_result = diag_threads[i].wait_to_finish()
-			diag_results.append(diag_result)
-			diag_mtx.unlock()
+		if row_threads[i].is_started(): row_threads[i].wait_to_finish()
+		if col_threads[i].is_started(): col_threads[i].wait_to_finish()
+		if color_threads[i].is_started(): color_threads[i].wait_to_finish()
+		if diag_threads[i].is_started(): diag_threads[i].wait_to_finish()
 	
 	destroy_threads()
-	
-	# Procesar resultados: marcar coronas inválidas y contar OK
-	# Cada resultado es un dict con keys:
-	#   "valid" : bool
-	#   "invalid_positions" : Array of Vector2(row, col)
-	
-	for i in range(BOARD_SIZE):
-		if i < row_results.size():
-			if row_results[i]["valid"]:
-				rows_ok += 1
-			else:
-				invalid_positions.append_array(row_results[i]["invalid_positions"])
-		if i < col_results.size():
-			if col_results[i]["valid"]:
-				columns_ok += 1
-			else:
-				invalid_positions.append_array(col_results[i]["invalid_positions"])
-		if i < color_results.size():
-			if color_results[i]["valid"]:
-				colors_ok += 1
-			else:
-				invalid_positions.append_array(color_results[i]["invalid_positions"])
-		if i < diag_results.size():
-			if diag_results[i]["valid"]:
-				diagonals_ok += 1
-			else:
-				invalid_positions.append_array(diag_results[i]["invalid_positions"])
 
 	mark_invalid_crowns(invalid_positions)
-
+	
 	if rows_ok == BOARD_SIZE && columns_ok == BOARD_SIZE && colors_ok == BOARD_SIZE and diagonals_ok == BOARD_SIZE:
 		win_game()
 
@@ -154,12 +105,12 @@ func create_mutex():
 	col_mtx = Mutex.new()
 	color_mtx = Mutex.new()
 	diag_mtx = Mutex.new()
+	invalid_positions_mtx = Mutex.new()
 
 	return
 
 func count_crowns_in_row(row: int):
 
-	var invalid_pos = []
 	var crowns = 0
 
 	for i in range(BOARD_SIZE):
@@ -170,16 +121,17 @@ func count_crowns_in_row(row: int):
 	if crowns > 1:
 		for i in range(BOARD_SIZE):
 			if board[row][i].getHasCrown():
-				invalid_pos.append(Vector2(row, i))
-
-	return {
-		"valid": crowns == 1,
-		"invalid_positions": invalid_pos
-	}
+				invalid_positions_mtx.lock()
+				invalid_positions.append(Vector2(row, i))
+				invalid_positions_mtx.unlock()
+	
+	if crowns == 1:
+		row_mtx.lock()
+		rows_ok += 1
+		row_mtx.unlock()
 
 func count_crowns_in_column(col: int):
 
-	var invalid_pos = []
 	var crowns = 0
 
 	for i in range(BOARD_SIZE):
@@ -190,16 +142,17 @@ func count_crowns_in_column(col: int):
 	if crowns > 1:
 		for i in range(BOARD_SIZE):
 			if board[i][col].getHasCrown():
-				invalid_pos.append(Vector2(i, col))
+				invalid_positions_mtx.lock()
+				invalid_positions.append(Vector2(i, col))
+				invalid_positions_mtx.unlock()
 
-	return {
-		"valid": crowns == 1,
-		"invalid_positions": invalid_pos
-	}
+	if crowns == 1:
+		col_mtx.lock()
+		columns_ok += 1
+		col_mtx.unlock()
 
 func count_crowns_in_color(c: int):
 
-	var invalid_pos = []
 	var crowns = 0
 	var color
 	
@@ -215,12 +168,14 @@ func count_crowns_in_color(c: int):
 		for i in range(BOARD_SIZE):
 			for j in range(BOARD_SIZE):
 				if board[i][j].getColor() == color and board[i][j].getHasCrown():
-					invalid_pos.append(Vector2(i, j))
+					invalid_positions_mtx.lock()
+					invalid_positions.append(Vector2(i, j))
+					invalid_positions_mtx.unlock()
 
-	return {
-		"valid": crowns == 1,
-		"invalid_positions": invalid_pos
-	}
+	if crowns == 1:
+		color_mtx.lock()
+		colors_ok += 1
+		color_mtx.unlock()
 
 func validate_diagonals(row: int):
 	var invalid_pos = []
@@ -250,12 +205,14 @@ func validate_diagonals(row: int):
 	var unique_pos = []
 	for pos in invalid_pos:
 		if not unique_pos.has(pos):
-			unique_pos.append(pos)
-
-	return {
-		"valid": not conflicts_found,
-		"invalid_positions": unique_pos
-	}
+			invalid_positions_mtx.lock()
+			invalid_positions.append(pos)
+			invalid_positions_mtx.unlock()
+	
+	if not conflicts_found:
+		diag_mtx.lock()
+		diagonals_ok += 1
+		diag_mtx.unlock()
 
 func get_color_by_id(id: int):
 
@@ -303,8 +260,8 @@ func mark_invalid_crowns(positions: Array):
 			board[r][c].setCrownInvalid()
 			
 func _process(delta):
-	var tiempo_juego = timer_scene.time_elapsed
-	var nuevo_pitch = 1.0 + (tiempo_juego / 60.0) * 0.5
+	var game_time = timer_scene.time_elapsed
+	var nuevo_pitch = 1.0 + (game_time / 60.0) * 0.5
 	$AudioStreamPlayer.pitch_scale = clamp(nuevo_pitch, 1.0, 1.5)
 		
 func update_gsheet(result: String, time: int):
