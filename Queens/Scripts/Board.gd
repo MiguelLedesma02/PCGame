@@ -7,6 +7,8 @@ extends Node
 @onready var container_board = $"../CenterContainer"
 @onready var popup_congratulations = $"../PopUpCongratulations"
 @onready var undo_button = $"../UndoButton"
+@onready var help_button = $"../HelpButton"
+@onready var music_button = $"../MusicButton"
 @onready var timer_scene = get_tree().get_root().get_node("Main")
 
 #Globales
@@ -280,7 +282,9 @@ func win_game():
 
 	background_board.visible = false
 	container_board.visible = false
-	undo_button.visible= false
+	undo_button.visible = false
+	help_button.visible = false
+	music_button.visible = false
 	popup_congratulations.visible = true
 	main.get_node("Timer").stop()
 	enviar_intento_a_gsheets("ganó", timer_scene.time_elapsed)

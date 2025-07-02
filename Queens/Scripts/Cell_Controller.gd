@@ -64,6 +64,7 @@ func _on_right_pressed():
 	if has_crown:
 		has_crown = false
 		crown.visible = has_crown
+		red_crown.visible= has_crown
 
 func clear():
 	if has_crown:
