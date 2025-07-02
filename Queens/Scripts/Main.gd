@@ -9,7 +9,9 @@ var colors_file
 @onready var undo_button = $UndoButton
 @onready var help_button = $HelpButton
 @onready var back_button = $BackButton/Back
-
+@onready var audio_player = $Board/AudioStreamPlayer
+@onready var music_button = $MusicButton
+@onready var background_board = $BackgroundBoard
 
 const levels_scene = "res://Scenes/Levels.tscn"
 
@@ -17,6 +19,9 @@ const levels_scene = "res://Scenes/Levels.tscn"
 const BOARD_SIZE = 8
 var board = []
 var colors = []
+var music_on = true
+const music_on_db = 0
+const music_off_db = -80
 
 #Timer
 @onready var timer_label = $TimerLabel
@@ -111,10 +116,25 @@ func _on_help_pressed() -> void:
 	help_button.disabled = true
 	back_button.disabled = true
 	undo_button.disabled = true
-
+	music_button.disabled = true
+	background_board.visible = false
+	grid.visible = false
 
 func _on_continue_button_pressed() -> void:
 	help_popup.visible = false
 	help_button.disabled = false
 	back_button.disabled = false
 	undo_button.disabled = false
+	music_button.disabled = false
+	background_board.visible = true
+	grid.visible = true
+
+func _on_music_button_pressed() -> void:
+	if music_on:
+		audio_player.volume_db = music_off_db
+		music_on = false
+	else:
+		audio_player.volume_db = music_on_db
+		music_on = true
+		
+	

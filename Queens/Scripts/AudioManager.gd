@@ -4,6 +4,7 @@ extends Node
 @onready var put_crown_audio: AudioStreamPlayer = $PutCrownAudio
 @onready var quit_crown_audio: AudioStreamPlayer = $QuitCrownAudio
 
+
 func play_button_sound():
 	press_button_audio.stop()
 	press_button_audio.play()
