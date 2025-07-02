@@ -15,6 +15,7 @@ extends Node
 const BOARD_SIZE = 8
 var board = []
 var tiempo_juego = 0.0
+const url_sheet = "https://script.google.com/macros/s/AKfycbxeDrmfad-CVwbeJ73dk_2fGG0TACWjNaF_03R3V1Kh2W3DfyG5ZLb-c3-mIwz1GHA4/exec"
 
 #Vectores de Hilos
 var row_threads = []
@@ -40,10 +41,6 @@ func _ready():
 
 func cell_updated():
 	
-	#var only_one_crown_row = false
-	#var only_one_crown_col = false
-	#var only_one_crown_color = false
-	
 	reset_all_crowns_color()
 
 	var rows_ok = 0
@@ -62,13 +59,14 @@ func cell_updated():
 	#Se crean los hilos
 	create_threads()
 
-	#Se crea un hilo para cada fila, columna y color
+	#Se inicia la ejecución de cada hilo para que corran concurrentemente
 	for i in range(BOARD_SIZE):
 		row_threads[i].start(count_crowns_in_row.bind(i))
 		col_threads[i].start(count_crowns_in_column.bind(i))
 		color_threads[i].start(count_crowns_in_color.bind(i))
 		diag_threads[i].start(validate_diagonals.bind(i))
-
+		
+	#Espera y guarda los resultados
 	for i in range(BOARD_SIZE):
 
 		if row_threads[i].is_started():
@@ -287,7 +285,7 @@ func win_game():
 	music_button.visible = false
 	popup_congratulations.visible = true
 	main.get_node("Timer").stop()
-	enviar_intento_a_gsheets("ganó", timer_scene.time_elapsed)
+	update_gsheet("Ganó", timer_scene.time_elapsed)
 
 	
 func reset_all_crowns_color():
@@ -309,19 +307,18 @@ func _process(delta):
 	var nuevo_pitch = 1.0 + (tiempo_juego / 60.0) * 0.5
 	$AudioStreamPlayer.pitch_scale = clamp(nuevo_pitch, 1.0, 1.5)
 		
-func enviar_intento_a_gsheets(resultado: String, tiempo: int):
+func update_gsheet(result: String, time: int):
 	var data = {
 		"jugador": "Jugador 1",
-		"resultado": resultado,
-		"tiempo": tiempo,
+		"resultado": result,
+		"tiempo": time,
 		"detalles": "Intento desde Godot"
 	}
 	
 	var json_data = JSON.stringify(data)
-	var url = "https://script.google.com/macros/s/AKfycbxeDrmfad-CVwbeJ73dk_2fGG0TACWjNaF_03R3V1Kh2W3DfyG5ZLb-c3-mIwz1GHA4/exec"
 
 	$HTTPRequest.request(
-		url,
+		url_sheet,
 		["Content-Type: application/json"],
 		HTTPClient.METHOD_POST,
 		json_data
